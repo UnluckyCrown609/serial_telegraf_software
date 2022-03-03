@@ -1,0 +1,18 @@
+[Unit]
+Description=The plugin-driven server agent for reporting metrics into InfluxDB
+Documentation=https://github.com/influxdata/telegraf
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/default/telegraf
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/.local/bin/
+ExecStart=/usr/local/go/src/telegraf/telegraf --config /home/pi/flowmeter_pi_software/telegraf_template.conf $TELEGRAF_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartForceExitStatus=SIGPIPE
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target
